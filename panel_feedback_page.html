@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El desarrollo infantil en la era digital</title>
+    <meta name="description" content="Panel sobre desarrollo infantil: Recursos, evidencia y prácticas para familias y docentes.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:ital,wght@1,400;1,600&family=Merriweather:ital,wght@0,300;0,700;1,300&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variables & Reset --- */
+        :root {
+            --c-burgundy: #7A0F0F;
+            --c-kraft: #C49A6C;
+            --c-cream: #F6EDE6;
+            --c-navy: #2B3A42;
+            --c-olive: #7B8B6F;
+            --c-gold: #D4B27A;
+            --c-white: #FFFFFF;
+            
+            --font-title: 'Playfair Display', serif;
+            --font-subtitle: 'Lora', serif;
+            --font-body: 'Lato', sans-serif;
+
+            --shadow-soft: 0 10px 30px -10px rgba(43, 58, 66, 0.15);
+            --shadow-hover: 0 20px 40px -12px rgba(122, 15, 15, 0.25);
+            
+            --trans-smooth: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Dark Mode Support (Visual Variant) */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --c-cream: #1a2429; /* Darker Navy */
+                --c-navy: #F6EDE6; /* Cream Text */
+                --c-white: #2B3A42;
+                --shadow-soft: 0 10px 30px -10px rgba(0,0,0, 0.5);
+            }
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--c-cream);
+            color: var(--c-navy);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; font-family: inherit; }
+
+        /* --- Layout Utilities --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 80px 0;
+            position: relative;
+        }
+
+        /* --- Components --- */
+        .btn-cta {
+            background-color: var(--c-burgundy);
+            color: white;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: var(--trans-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 14px rgba(122, 15, 15, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px) scale(1.05);
+            background-color: #5e0b0b;
+            box-shadow: 0 8px 20px rgba(122, 15, 15, 0.4);
+        }
+        
+        .btn-cta-secondary {
+            background-color: var(--c-olive);
+            color: white;
+        }
+
+        .btn-cta-secondary:hover {
+            background-color: #5A6B4F;
+            box-shadow: 0 8px 20px rgba(123, 139, 111, 0.4);
+        }
+
+        /* Ripple effect CSS handled via JS or pseudo element */
+        .btn-cta::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 0; height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn-cta:active::after {
+            width: 300px; height: 300px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--c-gold);
+            color: var(--c-burgundy);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        /* --- Header / Hero --- */
+        header {
+            padding: 20px 0;
+            position: absolute;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--c-burgundy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px; /* Space for header */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-illustration {
+            order: 1; /* Left */
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .hero-content {
+            order: 2; /* Right */
+            text-align: left;
+        }
+
+        .hero h1 {
+            font-family: var(--font-title);
+            font-size: 3.5rem; /* 56px approx */
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--c-navy);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.7s ease-out 0.2s forwards;
+        }
+
+        .hero p {
+            font-family: var(--font-subtitle);
+            font-size: 1.5rem;
+            color: var(--c-olive);
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.7s ease-out 0.4s forwards;
+        }
+
+        .hero .cta-wrapper {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: scale(0.9);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards;
+        }
+
+        /* --- Cards Section --- */
+        .cards-section {
+            background: linear-gradient(180deg, var(--c-cream) 0%, rgba(196, 154, 108, 0.1) 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--c-navy);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .card {
+            background: var(--c-white);
+            border-radius: 16px;
+            padding: 40px 24px 32px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--shadow-soft);
+            transition: var(--trans-smooth);
+            border: 1px solid rgba(0,0,0,0.05);
+            opacity: 0; /* JS handles fade in */
+            transform: translateY(30px);
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--c-burgundy);
+        }
+
+        /* Sticker Floating Animation */
+        .sticker-container {
+            width: 120px;
+            height: 120px;
+            margin: -80px auto 20px; /* Pull up */
+            position: relative;
+            z-index: 2;
+        }
+        
+        .sticker-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .sticker-svg {
+            animation: bounce 1s infinite alternate;
+        }
+
+        .card h3 {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--c-burgundy);
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: var(--c-navy);
+            margin-bottom: 24px;
+        }
+
+        .btn-link {
+            background: transparent;
+            color: var(--c-olive);
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-link:hover {
+            color: var(--c-burgundy);
+            border-color: var(--c-burgundy);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--c-navy);
+            color: var(--c-cream);
+            padding: 60px 0 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .footer-ornament {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 10px;
+            background-image: repeating-linear-gradient(45deg, var(--c-gold), var(--c-gold) 10px, var(--c-navy) 10px, var(--c-navy) 20px);
+        }
+
+        .back-to-top {
+            background: var(--c-olive);
+            color: white;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 32px;
+            transition: 0.3s;
+        }
+        .back-to-top:hover { background: var(--c-gold); color: var(--c-navy); }
+
+        /* --- Modal Styling --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(43, 58, 66, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal-backdrop.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: var(--c-white);
+            width: 90%;
+            max-width: 600px;
+            border-radius: 16px;
+            padding: 40px;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 4px solid var(--c-burgundy);
+        }
+        .modal-backdrop.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px; right: 20px;
+            font-size: 1.5rem;
+            color: var(--c-olive);
+            background: none;
+            transition: 0.2s;
+        }
+        .modal-close:hover { color: var(--c-burgundy); transform: rotate(90deg); }
+
+        .modal-thumbs {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        .thumb {
+            width: 120px;
+            height: 80px;
+            background: var(--c-cream);
+            border-radius: 8px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--c-olive);
+            border: 1px dashed var(--c-olive);
+            font-size: 0.8rem;
+        }
+        
+        /* --- Gemini Modal Specific Styles --- */
+        #gemini-query-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 2px solid var(--c-olive);
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        #gemini-query-input:focus {
+            outline: none;
+            border-color: var(--c-burgundy);
+        }
+
+        .response-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .bg-response-box {
+            background-color: #f0f4f7;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: inset 0 1px 5px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+            color: var(--c-navy);
+        }
+        
+        .text-c-burgundy { color: var(--c-burgundy); }
+        .text-c-olive { color: var(--c-olive); }
+        .text-red-500 { color: #dc2626; } /* Standard red for errors */
+
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid var(--c-burgundy);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            display: inline-block;
+        }
+        .hidden { display: none !important; }
+
+        /* --- Animations Keyframes --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; text-align: center; }
+            .hero-illustration { order: 2; margin-top: 40px; }
+            .hero-content { order: 1; }
+            .hero .cta-wrapper { justify-content: center; }
+            .cards-grid { grid-template-columns: 1fr; gap: 60px; }
+            .hero h1 { font-size: 2.5rem; }
+            .card { margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <!-- Simple Monogram SVG -->
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="19" stroke="#7A0F0F" stroke-width="2"/>
+                    <path d="M12 28L20 12L28 28H24L20 18L16 28H12Z" fill="#7A0F0F"/>
+                </svg>
+                <span>DesarrolloDigital</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <!-- Left: Illustration (SVG) -->
+            <div class="hero-illustration">
+                <!-- Family Cartoon SVG -->
+                <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <clipPath id="circle-clip"><circle cx="300" cy="200" r="180"/></clipPath>
+                    </defs>
+                    <!-- Background blobs -->
+                    <path d="M50 200 Q150 50 300 100 T550 200 T300 350 T50 200" fill="#F6EDE6" stroke="#D4B27A" stroke-width="2"/>
+                    
+                    <!-- Stylized Father & Baby -->
+                    <g transform="translate(100, 50)">
+                        <!-- Sofa -->
+                        <rect x="50" y="180" width="220" height="100" rx="10" fill="#7B8B6F"/>
+                        <rect x="30" y="150" width="20" height="130" rx="5" fill="#5A6B4F"/>
+                        <rect x="270" y="150" width="20" height="130" rx="5" fill="#5A6B4F"/>
+                        
+                        <!-- Dad -->
+                        <circle cx="160" cy="140" r="30" fill="#C49A6C"/> <!-- Head -->
+                        <path d="M130 170 Q160 170 190 170 L190 240 L130 240 Z" fill="#2B3A42"/> <!-- Body -->
+                        
+                        <!-- Book -->
+                        <path d="M140 200 L180 200 L170 230 L150 230 Z" fill="#fff"/> 
+
+                        <!-- Child -->
+                        <circle cx="120" cy="220" r="20" fill="#C49A6C"/>
+                        <path d="M100 240 Q120 240 140 240 L140 260 L100 260 Z" fill="#7A0F0F"/>
+                    </g>
+
+                    <!-- Stylized Mother with Tablet -->
+                    <g transform="translate(350, 80)">
+                        <circle cx="50" cy="140" r="30" fill="#C49A6C"/>
+                        <path d="M20 170 Q50 170 80 170 L90 260 L10 260 Z" fill="#D4B27A"/>
+                        <!-- Tablet -->
+                        <rect x="60" y="190" width="40" height="50" fill="#2B3A42" rx="2"/>
+                        <rect x="62" y="192" width="36" height="46" fill="#fff" rx="1"/>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Right: Content -->
+            <div class="hero-content">
+                <span class="badge">Panel Interactivo</span>
+                <h1>El desarrollo infantil en la era digital</h1>
+                <p>Recursos, evidencia y prácticas para familias y docentes.</p>
+                <div class="cta-wrapper">
+                    <!-- NEW Gemini Feature Button -->
+                    <button class="btn-cta btn-cta-secondary" onclick="openModal('gemini-modal')" aria-label="Abrir consultor experto de IA">
+                        Consultor Experto Digital ✨
+                        <!-- Star Icon -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    </button>
+                    <!-- Original Feedback Button -->
+                    <a href="{{FEEDBACK_URL}}" target="_blank" class="btn-cta" id="hero-cta" aria-label="Abrir formulario de feedback">
+                        Dar feedback
+                        <!-- Arrow Icon -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Decoration Corner -->
+        <svg style="position: absolute; bottom: 0; left: 0; width: 150px;" viewBox="0 0 100 100">
+            <path d="M0 100 L0 0 Q50 0 100 100 Z" fill="#C49A6C" opacity="0.2"/>
+        </svg>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="section cards-section" id="recursos">
+        <div class="container">
+            <h2 class="section-title">Áreas de Enfoque</h2>
+            
+            <div class="cards-grid">
+                
+                <!-- Card 1: Contexto -->
+                <article class="card js-scroll-fade">
+                    <div class="sticker-container">
+                        <!-- Sticker: Retro TV + Clock -->
+                        <svg class="sticker-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="#F6EDE6" stroke="#C49A6C" stroke-width="2"/>
+                            <!-- TV -->
+                            <rect x="25" y="30" width="50" height="35" rx="5" fill="#2B3A42"/>
+                            <rect x="28" y="33" width="35" height="29" fill="#fff"/>
+                            <!-- Clock overlay -->
+                            <circle cx="70" cy="70" r="15" fill="#7A0F0F"/>
+                            <path d="M70 60 L70 70 L75 75" stroke="#fff" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3>Línea de Tiempo</h3>
+                    <p>Evolución del uso de pantallas desde la primera infancia hasta la adolescencia.</p>
+                    <button class="btn-link" onclick="openModal('modal1')">
+                        Ver recurso
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </article>
+
+                <!-- Card 2: Cognición -->
+                <article class="card js-scroll-fade">
+                    <div class="sticker-container">
+                        <!-- Sticker: Bulb + Puzzle -->
+                        <svg class="sticker-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="#F6EDE6" stroke="#7B8B6F" stroke-width="2"/>
+                            <!-- Bulb -->
+                            <path d="M35 30 Q50 10 65 30 Q70 45 60 55 L40 55 Q30 45 35 30" fill="#D4B27A"/>
+                            <rect x="42" y="55" width="16" height="10" fill="#2B3A42"/>
+                            <!-- Puzzle Piece -->
+                            <path d="M60 60 H70 V70 H80 V80 H70 V90 H60 V80 H50 V70 H60 Z" fill="#7B8B6F"/>
+                        </svg>
+                    </div>
+                    <h3>Cognición</h3>
+                    <p>Impacto en la atención, memoria y procesos de aprendizaje activo.</p>
+                    <button class="btn-link" onclick="openModal('modal2')">
+                        Ver recurso
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </article>
+
+                <!-- Card 3: Social-Emocional -->
+                <article class="card js-scroll-fade">
+                    <div class="sticker-container">
+                        <!-- Sticker: Shield + Heart -->
+                        <svg class="sticker-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="48" fill="#F6EDE6" stroke="#7A0F0F" stroke-width="2"/>
+                            <!-- Shield -->
+                            <path d="M30 30 L70 30 L70 50 Q70 80 50 90 Q30 80 30 50 Z" fill="#2B3A42"/>
+                            <!-- Heart -->
+                            <path d="M50 55 Q65 40 70 55 Q75 70 50 80 Q25 70 30 55 Q35 40 50 55" fill="#7A0F0F"/>
+                        </svg>
+                    </div>
+                    <h3>Seguridad Online</h3>
+                    <p>Estrategias para el bienestar emocional y navegación segura.</p>
+                    <button class="btn-link" onclick="openModal('modal3')">
+                        Ver recurso
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-ornament"></div>
+        <div class="container">
+            <div class="logo" style="justify-content: center; color: white; margin-bottom: 20px;">
+                 <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
+                    <circle cx="20" cy="20" r="19" stroke="#D4B27A" stroke-width="2"/>
+                    <path d="M12 28L20 12L28 28H24L20 18L16 28H12Z" fill="#D4B27A"/>
+                </svg>
+                <span style="color:#D4B27A">DesarrolloDigital</span>
+            </div>
+            <p style="opacity: 0.8; font-size: 0.9rem;">© 2024 Equipo de Investigación Educativa.</p>
+            <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Volver arriba">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Modals (Original Resources) -->
+    <div class="modal-backdrop" id="modal1">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal1')">&times;</button>
+            <h3 style="color:var(--c-burgundy); font-family:var(--font-title); margin-bottom:10px;">Línea de Tiempo y Contexto</h3>
+            <p>Descubre cómo ha cambiado el entorno digital en los últimos 20 años y qué hitos marcan la relación niño-pantalla.</p>
+            <div class="modal-thumbs">
+                <div class="thumb">Video: 2000-2024</div>
+                <div class="thumb">Infografía PDF</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="modal2">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal2')">&times;</button>
+            <h3 style="color:var(--c-burgundy); font-family:var(--font-title); margin-bottom:10px;">Cognición y Aprendizaje</h3>
+            <p>Material sobre neurociencia aplicada a la educación digital. ¿Ayudan las apps educativas o distraen?</p>
+            <div class="modal-thumbs">
+                <div class="thumb">Entrevista Expertos</div>
+                <div class="thumb">Checklist Docente</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-backdrop" id="modal3">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('modal3')">&times;</button>
+            <h3 style="color:var(--c-burgundy); font-family:var(--font-title); margin-bottom:10px;">Social-Emocional y Seguridad</h3>
+            <p>Guías para padres sobre ciberacoso, autoestima digital y configuración de control parental.</p>
+            <div class="modal-thumbs">
+                <div class="thumb">Taller Familias</div>
+                <div class="thumb">Guía Seguridad</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW Gemini Modal -->
+    <div class="modal-backdrop" id="gemini-modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <button class="modal-close" onclick="closeModal('gemini-modal')">&times;</button>
+            <h3 class="text-c-burgundy" style="font-family:var(--font-title); margin-bottom:10px;">Consultor Experto Digital ✨</h3>
+            <p style="color:var(--c-navy); margin-bottom: 20px;">Haz una pregunta específica sobre desarrollo infantil, seguridad o pantallas. El modelo de IA buscará y te responderá con información actualizada y basada en evidencia.</p>
+            
+            <textarea id="gemini-query-input" placeholder="Ej: ¿Cuánto tiempo de pantalla se recomienda para un niño de 5 años? ¿Cómo le explico el ciberacoso a un adolescente?" aria-label="Introduce tu pregunta"></textarea>
+
+            <button class="btn-cta btn-cta-secondary" id="gemini-submit-btn" onclick="handleQuery()" style="padding: 10px 20px; font-size: 1rem;">
+                <span id="loading-spinner" class="spinner hidden"></span>
+                Obtener Respuesta
+            </button>
+
+            <div class="response-container">
+                <div id="gemini-query-result" class="bg-response-box">
+                    <p style="color: var(--c-olive);">Tu respuesta aparecerá aquí.</p>
+                </div>
+                <div id="gemini-sources" style="font-size: 0.85rem;">
+                    <!-- Las fuentes se mostrarán aquí -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Gemini API Configuration ---
+        const MAX_RETRIES = 5;
+        // La clave API es proporcionada por el entorno
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+
+        // Función para manejar el reintento de la llamada API con retroceso exponencial
+        async function fetchWithRetry(url, options, retries = 0) {
+            try {
+                const response = await fetch(url, options);
+                if (response.status === 429 && retries < MAX_RETRIES) {
+                    const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+                    console.warn(`Rate limit hit (429). Retrying in ${delay / 1000}s...`);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return fetchWithRetry(url, options, retries + 1);
+                }
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status} - ${response.statusText}`);
+                }
+                return response;
+            } catch (error) {
+                if (retries < MAX_RETRIES) {
+                    const delay = Math.pow(2, retries) * 1000 + Math.random() * 1000;
+                    console.error(`Fetch failed. Retrying in ${delay / 1000}s.`, error);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return fetchWithRetry(url, options, retries + 1);
+                }
+                // Si falla después de todos los reintentos, lanzamos el error para que lo maneje el llamador.
+                throw new Error(`Fetch failed after ${MAX_RETRIES} attempts: ${error.message}`);
+            }
+        }
+
+        // Llama a la API de Gemini con conexión a Google Search para obtener respuestas fundamentadas
+        async function getAIGroundedResponse(prompt) {
+            const systemPrompt = "Act as an expert in child development and digital literacy. Provide a concise, evidence-based answer to the user's question, suitable for parents or educators. The response must be in Spanish.";
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                tools: [{ "google_search": {} }], // Habilita la conexión a Google Search
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            const options = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            };
+
+            try {
+                const response = await fetchWithRetry(apiUrl, options);
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    const text = candidate.content.parts[0].text;
+                    let sources = [];
+                    const groundingMetadata = candidate.groundingMetadata;
+                    
+                    if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                        sources = groundingMetadata.groundingAttributions
+                            .map(attribution => ({
+                                uri: attribution.web?.uri,
+                                title: attribution.web?.title,
+                            }))
+                            .filter(source => source.uri && source.title);
+                    }
+
+                    return { text, sources };
+
+                } else {
+                    console.error("Gemini API response structure error:", result);
+                    // Mensaje de error más amigable para el usuario
+                    return { text: "Lo siento, hubo un problema al procesar la respuesta. Por favor, reformula tu pregunta. (Error de estructura)", sources: [] };
+                }
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                // Mensaje de error de conexión para el usuario
+                return { text: "Error de conexión con el Consultor IA. Asegúrate de que tu pregunta sea clara e intenta de nuevo en unos momentos.", sources: [] };
+            }
+        }
+
+        // Manejador del evento de consulta del Consultor IA
+        async function handleQuery() {
+            const input = document.getElementById('gemini-query-input');
+            const prompt = input.value.trim();
+            const resultDiv = document.getElementById('gemini-query-result');
+            const sourcesDiv = document.getElementById('gemini-sources');
+            const submitButton = document.getElementById('gemini-submit-btn');
+            const loadingSpinner = document.getElementById('loading-spinner');
+
+            if (!prompt) {
+                resultDiv.innerHTML = '<p class="text-red-500">Por favor, introduce tu pregunta.</p>';
+                return;
+            }
+
+            // Reset UI and show loading
+            resultDiv.innerHTML = `<p style="color: var(--c-olive);">Buscando la información más reciente...</p>`;
+            sourcesDiv.innerHTML = '';
+            submitButton.disabled = true;
+            loadingSpinner.classList.remove('hidden');
+
+            // Call API
+            const response = await getAIGroundedResponse(prompt);
+
+            // Update UI
+            loadingSpinner.classList.add('hidden');
+            submitButton.disabled = false;
+            
+            // Display result text
+            resultDiv.innerHTML = `<div class="bg-response-box">${response.text.replace(/\n/g, '<br>')}</div>`;
+
+            // Display sources
+            if (response.sources.length > 0) {
+                let sourcesHtml = '<p class="mt-4 text-sm font-semibold text-c-burgundy">Fuentes consultadas (Google Search):</p>';
+                sourcesHtml += '<ul style="list-style: disc; margin-left: 20px; margin-top: 8px; font-size: 0.9rem; line-height: 1.4;">';
+                
+                // Usar un Set para garantizar fuentes únicas
+                const uniqueSources = new Set();
+                response.sources.forEach(source => {
+                    if (!uniqueSources.has(source.uri)) {
+                        sourcesHtml += `<li><a href="${source.uri}" target="_blank" class="text-c-olive" style="text-decoration: underline; color: var(--c-olive);">${source.title || 'Enlace sin título'}</a></li>`;
+                        uniqueSources.add(source.uri);
+                    }
+                });
+
+                sourcesHtml += '</ul>';
+                sourcesDiv.innerHTML = sourcesHtml;
+            } else if (response.sources.length === 0 && !response.text.includes("Lo siento")) {
+                sourcesDiv.innerHTML = '<p class="mt-4" style="font-size: 0.85rem; color: var(--c-olive);">La respuesta está basada en conocimientos generales y puede no tener fuentes de atribución directas.</p>';
+            }
+        }
+
+
+        // --- Modal Logic (Original) ---
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset Gemini modal content on close
+            if (id === 'gemini-modal') {
+                document.getElementById('gemini-query-input').value = '';
+                document.getElementById('gemini-query-result').innerHTML = '<p style="color: var(--c-olive);">Tu respuesta aparecerá aquí.</p>';
+                document.getElementById('gemini-sources').innerHTML = '';
+            }
+        }
+
+        // Close on backdrop click
+        document.querySelectorAll('.modal-backdrop').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-backdrop.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+
+        // --- Scroll Animation (Intersection Observer) ---
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    // Add stagger effect based on index (simulated via timeout or css var)
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 150); 
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.js-scroll-fade').forEach(el => {
+            observer.observe(el);
+        });
+
+        // --- Feedback URL Logic ---
+        // Ensure the correct Google Form link is used
+        const FEEDBACK_URL = "https://docs.google.com/forms/d/e/1FAIpQLScheGgu_q_5bYoNeDBt8jg1o9O9IcR2slOZpNkRY0xYN5sWrA/viewform?usp=header"; 
+        
+        // Update links that contain the placeholder
+        document.querySelectorAll('a[href="{{FEEDBACK_URL}}"]').forEach(link => {
+            link.href = FEEDBACK_URL;
+            link.addEventListener('click', (e) => {
+                // Add ripple or analytics here if needed
+            });
+        });
+    </script>
+</body>
+</html>
